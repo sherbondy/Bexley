@@ -1,6 +1,6 @@
 (ns bexley.core
   (:require [clojure.string :as str])
-  (:use hiccup.core))
+  (:use hiccup.core hiccup.page))
 
 (def people
   [{:name "Ethan Sherbondy" :suite 406 :athena "ethanis"}
@@ -33,12 +33,14 @@
 
   ([person]
    (let [mates (suitemates person)]
-     (html [:p#buddy (str "Hello there, " (fname person))]
-       (if (nil? mates)
-         [:p "You have no friends"]
-         [:div
-          [:p "You have suitemates!"]
-          [:ul 
-            (for [mate mates]
-              [:li [:a {:href (email mate)} (mate :name)]])]]
-         )))))
+     (html5
+       [:body
+        [:p#buddy (str "Hello there, " (fname person))]
+         (if (nil? mates)
+           [:p "You have no friends"]
+           [:div
+            [:p "You have suitemates!"]
+            [:ul 
+              (for [mate mates]
+                [:li [:a {:href (email mate)} (mate :name)]])]]
+           )]))))
