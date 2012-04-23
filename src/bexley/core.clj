@@ -20,19 +20,22 @@
 
 (defn suitemates [person]
   (let [suite (person :suite)]
-  (filter (fn [other] (and (= (other :suite) suite) (not (= other person)))) 
-          people)))
+    (filter (fn [other] (and (= (other :suite) suite) (not (= other person)))) 
+            people)))
 
 (defn page
   "Returns some html, dude"
   ([]
    (html [:span {:class "foo"} "bar"]))
-  ([nom & others]
-   (html [:p#buddy (str "hello there " nom)]
-         (if others
-           [:p "You have friends!"
-             [:ul 
-              (for [other others]
-                [:li other])]]
-           [:p "You have no friends"]
-           ))))
+
+  ([person]
+   (let [mates (suitemates person)]
+     (html [:p#buddy (str "hello there " (fname person))]
+           (if (< 0 (count mates))
+             [:div
+              [:p "You have suitemates!"]
+              [:ul 
+                (for [mate mates]
+                  [:li (mate :name)])]]
+             [:p "You have no friends"]
+             )))))
