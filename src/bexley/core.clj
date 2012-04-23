@@ -3,7 +3,7 @@
   (:use hiccup.core))
 
 (def people
-  [{:name "Ethan Sherbondy" :suite 406}
+  [{:name "Ethan Sherbondy" :suite 406 :}
    {:name "Dennis Wilson" :suite 406}
    {:name "Sophie Diehl" :suite 406}
    {:name "Chris Sarabalis" :suite 408}
@@ -30,12 +30,12 @@
 
   ([person]
    (let [mates (suitemates person)]
-     (html [:p#buddy (str "hello there " (fname person))]
-           (if (< 0 (count mates))
-             [:div
-              [:p "You have suitemates!"]
-              [:ul 
-                (for [mate mates]
-                  [:li (mate :name)])]]
-             [:p "You have no friends"]
-             )))))
+     (html [:p#buddy (str "Hello there " (fname person))]
+       (if (nil? mates)
+         [:p "You have no friends"]
+         [:div
+          [:p "You have suitemates!"]
+          [:ul 
+            (for [mate mates]
+              [:li (mate :name)])]]
+         )))))
