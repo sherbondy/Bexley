@@ -10,7 +10,7 @@
    {:name "Kristjan Kaseniit" :suite 408 :athena "kristjan"}])
 
 (defn splitname [person]
-  (str/split (person :name) #"\s"))
+  (str/split (:name person) #"\s"))
 
 (defn fname [person]
   (first (splitname person)))
@@ -19,11 +19,11 @@
   (last (splitname person)))
 
 (defn email [person]
-  (str (person :athena) "@mit.edu"))
+  (str (:athena person) "@mit.edu"))
 
 (defn suitemates [person]
-  (let [suite (person :suite)]
-    (filter (fn [other] (and (= (other :suite) suite) (not (= other person)))) 
+  (let [suite (:suite person)]
+    (filter (fn [other] (and (= (:suite other) suite) (not (= other person)))) 
             people)))
 
 (defn page
@@ -42,5 +42,9 @@
             [:p "You have suitemates!"]
             [:ul 
               (for [mate mates]
-                [:li [:a {:href (email mate)} (mate :name)]])]]
+                [:li [:a {:href (email mate)} (:name mate)]])]]
            )]))))
+
+(def ethan
+  "just for quick testing"
+  (first people))
