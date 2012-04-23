@@ -23,7 +23,7 @@
 
 (defn suitemates [person]
   (let [suite (:suite person)]
-    (filter (fn [other] (and (= (:suite other) suite) (not (= other person)))) 
+    (filter #(and (= (:suite %) suite) (not (= % person))) 
             people)))
 
 (defn page
