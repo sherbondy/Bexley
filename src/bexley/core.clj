@@ -1,6 +1,7 @@
 (ns bexley.core
   (:require [clojure.string :as str])
-  (:use hiccup.core hiccup.page))
+  (:use hiccup.core hiccup.page
+        clojure.java.shell))
 
 (def people
   [{:name "Ethan Sherbondy" :suite 406 :athena "ethanis"}
@@ -23,7 +24,7 @@
 
 (defn suitemates [person]
   (let [suite (:suite person)]
-    (filter #(and (= (:suite %) suite) (not (= % person))) 
+    (filter #(and (= (:suite %) suite) (not= % person)) 
             people)))
 
 (defn page
@@ -48,3 +49,16 @@
 (def ethan
   "just for quick testing"
   (first people))
+
+(def raw-residents (atom nil))
+
+(defn parse-residents []
+  (letfn [(parse-resident [resident]
+            [(mapcat #(vector (keyword (%1 1)) (%1 2)) 
+                    (re-seq #"\n(\w+): (.*)\n" resident))])]
+    (vector (mapcat parse-resident (str/split @raw-residents #"\n#.*\n")))))
+
+(defn get-residents []
+  (reset! raw-residents (:out (sh "ldapsearch" "-h" "ldap.mit.edu" 
+                                  "-b" "dc=mit,dc=edu" 
+                                  "-x" "street=Bexley Hall *"))))
